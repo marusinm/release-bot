@@ -48,14 +48,17 @@ def handle_issue(webhook_payload):
     """Handler for newly opened issues"""
     # configuration.configuration = Path(
     #     '/Users/marusinm/Documents/Python/tmp/bot-test-conf/conf.yaml').resolve()
-    configuration.configuration = Path(getenv("CONF_PATH", "/secrets/prod/conf.yaml")).resolve()
+    configuration.configuration = Path(getenv("CONF_PATH",
+                                              "/home/release-bot/.config/conf.yaml")).resolve()
 
     # add configuration from Github webhook
     configuration.repository_name = webhook_payload['repository']['name']
     configuration.repository_owner = webhook_payload['repository']['owner']['login']
     configuration.github_username = webhook_payload['issue']['user']['login']
-    configuration.clone_url = webhook_payload['repository']['clone_url']
     configuration.load_configuration()  # load the rest of configuration if there is any
+    configuration.clone_url = f'https://x-access-token:' \
+        f'{configuration.github_token}@github.com/' \
+        f'{configuration.repository_owner}/{configuration.repository_name}.git'
 
     logger = configuration.logger
     release_bot = ReleaseBot(configuration)
@@ -79,14 +82,17 @@ def handle_pr(webhook_payload):
     """Handler for merged PR"""
     # configuration.configuration = Path(
     #     '/Users/marusinm/Documents/Python/tmp/bot-test-conf/conf.yaml').resolve()
-    configuration.configuration = Path(getenv("CONF_PATH", "/secrets/prod/conf.yaml")).resolve()
+    configuration.configuration = Path(getenv("CONF_PATH",
+                                              "/home/release-bot/.config/conf.yaml")).resolve()
 
     # add configuration from Github webhook
     configuration.repository_name = webhook_payload['repository']['name']
     configuration.repository_owner = webhook_payload['repository']['owner']['login']
     configuration.github_username = webhook_payload['pull_request']['user']['login']
-    configuration.clone_url = webhook_payload['repository']['clone_url']
     configuration.load_configuration()  # load the rest of configuration if there is any
+    configuration.clone_url = f'https://x-access-token:' \
+        f'{configuration.github_token}@github.com/' \
+        f'{configuration.repository_owner}/{configuration.repository_name}.git'
 
     logger = configuration.logger
     release_bot = ReleaseBot(configuration)
