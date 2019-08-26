@@ -5,7 +5,7 @@ IMAGE_NAME_DEV := usercont/release-bot:dev
 TEST_IMAGE_NAME := release-bot-tests
 
 image: files/install-rpm-packages.yaml files/recipe.yaml
-	docker build --rm -f Dockerfile.githubapp --tag=$(IMAGE_NAME) .
+	docker build --rm -f Dockerfile.app --tag=$(IMAGE_NAME) .
 
 image-dev:
 	docker build --tag=$(IMAGE_NAME_DEV) -f Dockerfile.dev .
